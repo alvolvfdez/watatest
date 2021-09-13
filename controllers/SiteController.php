@@ -67,7 +67,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $discountToNewClientGroup = new Discount(5);
+        $discountToNewClientGroup = new Discount(5, TYPE_ABSOLUTE);
         $newClientsGroup = new ClientGroup('Nuevos clientes', $discountToNewClientGroup);
         $customer = new User(1,'alvaro', $newClientsGroup);
 
@@ -82,6 +82,6 @@ class SiteController extends Controller
 
         $cart->addProduct($chairProduct);
 
-        return $this->render('index');
+        return $this->render('index', ['cart' => $cart]);
     }
 }

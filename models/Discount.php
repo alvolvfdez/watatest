@@ -39,18 +39,18 @@ class Discount extends BaseObject
         $this->discountType = $discountType;
     }
 
-    public function calculatePriceWithDiscount(float $price)
+    public function calculatePriceWithDiscount(float $amount)
     {
-        $finalPrice = $price;
+        $finalPrice = $amount;
         if ($this->discountAmount > 0)
         {
             switch ($this->discountType)
             {
                 case TYPE_ABSOLUTE:
-                    $finalPrice = $price - $this->discountAmount;
+                    $finalPrice = $amount - $this->discountAmount;
                     break;
                 case TYPE_PERCENTAGE:
-                    $finalPrice = $price - ($price * ($this->discountAmount / 100));
+                    $finalPrice -= ($finalPrice * ($this->discountAmount / 100));
                     break;
             }
         }

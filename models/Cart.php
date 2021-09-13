@@ -18,7 +18,17 @@ class Cart extends BaseObject
         $this->discount = $discount;
     }
 
-    public function addProduct(Product $product)
+    public function getCustomer(): User
+    {
+        return $this->customer;
+    }
+
+    public function getProductList(): array
+    {
+        return $this->productList;
+    }
+
+    public function addProduct(Product $product) : void
     {
         $this->productList[$product->getId()] = $product;
     }
@@ -26,7 +36,7 @@ class Cart extends BaseObject
     public function totalCalculation() : float
     {
         $total = 0.00;
-        foreach ($this->productList as $id => $product)
+        foreach ($this->productList as $product)
         {
             $total += $product->getPriceWithAllDiscountsApplied();
         }
@@ -42,10 +52,5 @@ class Cart extends BaseObject
     private function applyGroupClientDiscount($total) : float
     {
         return $this->customer->getClientGroup()->getDiscount()->calculatePriceWithDiscount($total);
-    }
-
-    public function setDiscount(Discount $discount): void
-    {
-        $this->discount = $discount;
     }
 }

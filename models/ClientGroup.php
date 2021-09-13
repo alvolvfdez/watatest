@@ -13,6 +13,16 @@ class ClientGroup
         $this->discount = $discount != NULL ? $discount : new Discount();
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
     public function getDiscount(): Discount
     {
         return $this->discount;
