@@ -2,103 +2,45 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
+use yii\base\BaseObject;
+
+class User extends BaseObject
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
-
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
+    private $id;
+    private $username;
+    private ClientGroup $clientGroup;
 
     /**
-     * {@inheritdoc}
+     * @param $id
+     * @param $username
      */
-    public static function findIdentity($id)
+    public function __construct($id, $username, ClientGroup $clientGroup = NULL)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        parent::__construct();
+        $this->id = $id;
+        $this->username = $username;
+        $this->clientGroup = $clientGroup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public function getUsername()
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        return $this->username;
     }
 
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
+    public function setUsername($username): void
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        $this->username = $username;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
+    public function getClientGroup(): ?ClientGroup
     {
-        return $this->id;
+        return $this->clientGroup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthKey()
+    public function setClientGroup(?ClientGroup $clientGroup): void
     {
-        return $this->authKey;
+        $this->clientGroup = $clientGroup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->authKey === $authKey;
-    }
 
-    /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
-     */
-    public function validatePassword($password)
-    {
-        return $this->password === $password;
-    }
 }

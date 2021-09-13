@@ -2,6 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Cart;
+use app\models\ClientGroup;
+use app\models\Discount;
+use app\models\Product;
+use app\models\ProductCategory;
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -61,68 +67,21 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $discountToNewClientGroup = new Discount(5);
+        $newClientsGroup = new ClientGroup('Nuevos clientes', $discountToNewClientGroup);
+        $customer = new User(1,'alvaro', $newClientsGroup);
+
+        $discountToCart = new Discount(10);
+        $cart = new Cart($customer, $discountToCart);
+
+        $officeDiscount = new Discount(30);
+        $officeCategory = new ProductCategory('office', $officeDiscount);
+
+        $chairDiscount = new Discount(0);
+        $chairProduct = new Product(1, 'chair', 25, $officeCategory, $chairDiscount);
+
+        $cart->addProduct($chairProduct);
+
         return $this->render('index');
-    }
-
-    /**
-     * Login action.
-     *
-     * @return Response|string
-     */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
-
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
     }
 }
