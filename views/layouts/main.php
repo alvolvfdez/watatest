@@ -70,8 +70,8 @@ AppAsset::register($this);
 
 <footer class="footer mt-auto py-3 text-muted">
     <div class="container">
-        <p class="float-left">&copy; My Company <?= date('Y') ?></p>
-        <p class="float-right"><?= Yii::powered() ?></p>
+        
+        <p class="float-right">Hecho por <a href="https://www.linkedin.com/in/alvolvfdez/">Álvaro</a></p>
     </div>
 </footer>
 
